@@ -1,0 +1,7 @@
+node_modules/
+dist/
+storage/
+.env
+.env_dev
+.env_test
+openssl-secret.txt

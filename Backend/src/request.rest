@@ -1,0 +1,34 @@
+###
+
+GET http://localhost:3000/
+
+###
+
+GET http://localhost:3000/posts
+
+###
+
+GET http://localhost:3000/posts/6734d959d9d641367d22f61f
+
+###
+
+GET http://localhost:3000/posts?owner=Eliav2
+
+###
+
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "owner": "Eliav2",
+    "title": "My Second post",
+    "content": "This is my first post"
+}
+
+
+###
+
+DELETE http://localhost:3000/posts/142341234
+
+###
+
