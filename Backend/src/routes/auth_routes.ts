@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import authController, { authMiddleware } from "../controllers/auth_controller";
 import { validate } from "../middleware/validate_middleware";
 import { registerSchema, loginSchema } from "../validations/auth_validation";
+import { authLimiter } from "../middleware/rate_limit_middleware";
 
 const router = express.Router();
 
@@ -65,7 +66,7 @@ const router = express.Router();
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", validate(registerSchema), authController.register);
+router.post("/register", authLimiter, validate(registerSchema), authController.register);
 
 /**
 * @swagger
@@ -104,7 +105,7 @@ router.post("/register", validate(registerSchema), authController.register);
 *       '500':
 *         description: Internal server error
 */
-router.post("/login", validate(loginSchema), authController.login);
+router.post("/login", authLimiter, validate(loginSchema), authController.login);
 
 router.post("/logout", authController.logout);
 

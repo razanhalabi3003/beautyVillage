@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import helmet from "helmet";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import file_routes from "./routes/file_routes";
@@ -21,9 +22,14 @@ import review_routes from "./routes/review_routes";
 import admin_routes from "./routes/admin_routes";
 import notFoundMiddleware from "./middleware/not_found_middleware";
 import errorMiddleware from "./middleware/error_middleware";
+import { generalLimiter } from "./middleware/rate_limit_middleware";
 
 
 // 1. Core middleware
+// CSP is disabled: swagger-ui-express relies on inline scripts/styles that
+// Helmet's default CSP would block. All of Helmet's other security headers
+// (X-Content-Type-Options, X-Frame-Options, HSTS, etc.) stay enabled.
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -43,8 +49,12 @@ app.use((req, res, next) => {
 app.use("/public/", express.static("public"));
 app.use("/storage/", express.static("storage"));
 
-// 3. Health route
+// 3. Health route (mounted before the general limiter so deployment
+// uptime checks are never rate-limited)
 app.use("/health", health_routes);
+
+// General API rate limiter
+app.use(generalLimiter);
 
 // 4. API routes
 app.use("/posts", posts_routes);
