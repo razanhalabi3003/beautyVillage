@@ -12,7 +12,7 @@
     "testFile": "shx cp .env_test .env && tsc && jest --detectOpenHandles --forceExit file.test.ts",
     "migrate:users": "shx cp .env_dev .env && ts-node src/scripts/migrate_users.ts",
     "seed:admin": "shx cp .env_dev .env && ts-node src/scripts/seed_admin.ts",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint ."
   },
   "author": "Yehuda Rozliyo",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
@@ -38,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.16.0",
+    "globals": "^15.15.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.7",
     "shx": "^0.4.0",
@@ -46,6 +48,7 @@
     "swagger-ui-express": "^5.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.67.0"
   }
 }

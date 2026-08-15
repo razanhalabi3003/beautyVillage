@@ -16,18 +16,15 @@ afterAll(async () => {
 describe("File Tests", () => {
     test("upload file", async () => {
         const filePath = `${__dirname}/test_file.txt`;
-        console.log(filePath);
         try {
             const response = await request(app)
                 .post("/file?file=test_file.txt").attach('file', filePath)
             expect(response.statusCode).toEqual(200);
             let url = response.body.url;
-            console.log(url);
             url = url.replace(/^.*\/\/[^/]+/, '')
             const res = await request(app).get(url)
             expect(res.statusCode).toEqual(200);
-        } catch (err) {
-            console.log(err);
+        } catch {
             expect(1).toEqual(2);
         }
     })

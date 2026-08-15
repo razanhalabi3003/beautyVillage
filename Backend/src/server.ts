@@ -12,6 +12,13 @@ import comments_routes from "./routes/comments_routes";
 import posts_routes from "./routes/posts_routes";
 import health_routes from "./routes/health_routes";
 import user_routes from "./routes/user_routes";
+import category_routes from "./routes/category_routes";
+import business_routes from "./routes/business_routes";
+import service_routes from "./routes/service_routes";
+import media_routes from "./routes/media_routes";
+import appointment_routes from "./routes/appointment_routes";
+import review_routes from "./routes/review_routes";
+import admin_routes from "./routes/admin_routes";
 import notFoundMiddleware from "./middleware/not_found_middleware";
 import errorMiddleware from "./middleware/error_middleware";
 
@@ -44,6 +51,13 @@ app.use("/posts", posts_routes);
 app.use("/comments", comments_routes);
 app.use("/auth", auth_routes);
 app.use("/users", user_routes);
+app.use("/categories", category_routes);
+app.use("/businesses", business_routes);
+app.use("/services", service_routes);
+app.use("/media", media_routes);
+app.use("/appointments", appointment_routes);
+app.use("/reviews", review_routes);
+app.use("/admin", admin_routes);
 app.use("/file/", file_routes);
 
 const options = {

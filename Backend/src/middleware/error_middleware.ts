@@ -41,6 +41,13 @@ const errorMiddleware = (err: AppError, req: Request, res: Response, next: NextF
         }
     }
 
+    // Multer: file too large, wrong upload field name, too many files, etc.
+    // (fileFilter rejections already carry their own statusCode via err.statusCode above.)
+    if (err.name === "MulterError") {
+        statusCode = 400;
+        message = err.message || "Invalid file upload";
+    }
+
     if (process.env.NODE_ENV !== "production") {
         console.error(err);
     }

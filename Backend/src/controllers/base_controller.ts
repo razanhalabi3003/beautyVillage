@@ -10,7 +10,6 @@ class BaseController {
 
   async getAll(req: Request, res: Response) {
     const filter = req.query;
-    console.log(filter);
     await new Promise<void>(resolve => setTimeout(() => {
       resolve();
     }, 2000));

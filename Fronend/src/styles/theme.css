@@ -1,0 +1,112 @@
+/* BeautyVillage design system - the single source of truth for branding.
+   Every color/radius/shadow used anywhere in the app must come from one of
+   the tokens below - never a hex value scattered in component CSS.
+   Loaded after bootstrap.rtl.css in main.tsx, so it can override Bootstrap's
+   own CSS custom properties without touching Bootstrap's source (no Sass
+   build needed - Bootstrap 5.3's compiled CSS already exposes its theme as
+   CSS variables). */
+
+:root {
+    /* ---- BeautyVillage brand tokens ---- */
+    --bv-bg: #fbf3f2; /* page background - very light blush */
+    --bv-bg-alt: #f6efe7; /* alternating sections - warm beige */
+    --bv-surface: #ffffff; /* cards, modals, form panels */
+
+    --bv-primary-soft: #f2c6ce; /* pale pink - badges, hover fills, subtle highlights */
+    --bv-primary: #c98793; /* dusty rose - buttons, links, active states */
+    --bv-primary-hover: #b96f7c; /* button/link hover */
+
+    --bv-secondary: #b9a79d; /* warm neutral - secondary buttons/text accents */
+
+    --bv-text: #33282a; /* body text - warm charcoal, not pure black */
+    --bv-text-muted: #7a6a6d; /* secondary text, placeholders */
+    --bv-border: #ecdbdd; /* card/input borders, dividers */
+
+    /* Muted semantic colors - still clearly readable as error/success/warning,
+       just toned down to fit the soft palette rather than Bootstrap's
+       fully-saturated defaults. */
+    --bv-danger: #c15b5b;
+    --bv-danger-rgb: 193, 91, 91;
+    --bv-success: #7fa98c;
+    --bv-success-rgb: 127, 169, 140;
+    --bv-warning: #d9a441;
+    --bv-warning-rgb: 217, 164, 65;
+
+    --bv-radius: 0.75rem;
+    --bv-radius-lg: 1rem;
+    --bv-radius-sm: 0.5rem;
+    --bv-shadow-sm: 0 2px 8px rgba(51, 40, 42, 0.06);
+    --bv-shadow: 0 6px 20px rgba(51, 40, 42, 0.09);
+
+    --bv-font: "Assistant", "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+
+    /* ---- Bootstrap variable overrides ---- */
+    --bs-font-sans-serif: var(--bv-font);
+    --bs-body-font-family: var(--bv-font);
+    --bs-body-bg: var(--bv-bg);
+    --bs-body-color: var(--bv-text);
+    --bs-border-color: var(--bv-border);
+    --bs-border-radius: var(--bv-radius);
+    --bs-border-radius-sm: var(--bv-radius-sm);
+    --bs-border-radius-lg: var(--bv-radius-lg);
+    --bs-box-shadow: var(--bv-shadow);
+    --bs-box-shadow-sm: var(--bv-shadow-sm);
+
+    --bs-primary: var(--bv-primary);
+    --bs-primary-rgb: 201, 135, 147;
+    --bs-secondary: var(--bv-secondary);
+    --bs-secondary-rgb: 185, 167, 157;
+    --bs-success: var(--bv-success);
+    --bs-success-rgb: var(--bv-success-rgb);
+    --bs-danger: var(--bv-danger);
+    --bs-danger-rgb: var(--bv-danger-rgb);
+    --bs-warning: var(--bv-warning);
+    --bs-warning-rgb: var(--bv-warning-rgb);
+
+    --bs-link-color: var(--bv-primary);
+    --bs-link-color-rgb: 201, 135, 147;
+    --bs-link-hover-color: var(--bv-primary-hover);
+}
+
+body {
+    direction: rtl;
+    text-align: right;
+    font-family: var(--bv-font);
+    background-color: var(--bv-bg);
+    color: var(--bv-text);
+}
+
+/* Belt-and-suspenders overrides for components whose compiled CSS scopes a
+   variable locally rather than reading the root one directly. */
+.btn {
+    --bs-btn-border-radius: var(--bv-radius);
+}
+.btn-primary {
+    --bs-btn-bg: var(--bv-primary);
+    --bs-btn-border-color: var(--bv-primary);
+    --bs-btn-hover-bg: var(--bv-primary-hover);
+    --bs-btn-hover-border-color: var(--bv-primary-hover);
+    --bs-btn-active-bg: var(--bv-primary-hover);
+    --bs-btn-active-border-color: var(--bv-primary-hover);
+}
+.card {
+    --bs-card-border-radius: var(--bv-radius);
+    --bs-card-border-color: var(--bv-border);
+    --bs-card-bg: var(--bv-surface);
+    box-shadow: var(--bv-shadow-sm);
+    transition: box-shadow 0.2s ease;
+}
+.card:hover {
+    box-shadow: var(--bv-shadow);
+}
+.form-control,
+.form-select {
+    --bs-border-radius: var(--bv-radius-sm);
+}
+
+/* Spacious layout: generous section padding by default, matching the
+   "generous whitespace" brief without introducing new spacing tokens -
+   pages just use Bootstrap's own py-5 / gap-4 utilities on top of this. */
+.section-alt {
+    background-color: var(--bv-bg-alt);
+}

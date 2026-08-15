@@ -7,6 +7,10 @@ import userModel from "../models/user_model";
 
 let app: Express;
 
+// Same reasoning as the other test files - bcrypt hashing plus network
+// round trips can exceed the default 5s hook timeout under load.
+jest.setTimeout(30000);
+
 type UserInfo = {
   name: string;
   email: string;
@@ -60,7 +64,6 @@ const testPostFail = {
 describe("Posts Tests", () => {
   test("Posts Get All test", async () => {
     const response = await request(app).get("/posts");
-    console.log(response.body);
     expect(response.statusCode).toBe(200);
   });
 
@@ -68,7 +71,6 @@ describe("Posts Tests", () => {
     const response = await request(app).post("/posts")
       .set("authorization", "JWT " + userInfo.token)
       .send(testPost1);
-    console.log(response.body);
     const post = response.body;
     expect(response.statusCode).toBe(201);
     expect(post.owner).toBe(userInfo._id);
@@ -80,8 +82,6 @@ describe("Posts Tests", () => {
   test("Posts Get By Id test", async () => {
     const response = await request(app).get("/posts/" + postId);
     const post = response.body;
-    console.log("/posts/" + postId);
-    console.log(post);
     expect(response.statusCode).toBe(200);
     expect(response.body._id).toBe(post._id);
   });
@@ -126,8 +126,6 @@ describe("Posts Tests", () => {
     expect(respponse2.statusCode).toBe(404);
 
     const respponse3 = await request(app).get("/posts/" + postId);
-    const post = respponse3.body;
-    console.log(post);
     expect(respponse3.statusCode).toBe(404);
   });
 });

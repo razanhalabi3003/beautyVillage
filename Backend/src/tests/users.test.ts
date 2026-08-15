@@ -7,6 +7,11 @@ import bcrypt from "bcrypt";
 
 let app: Express;
 
+// Same reasoning as businesses.test.ts/categories.test.ts/services.test.ts -
+// this file has the most tests and does bcrypt hashing/comparison plus
+// network round trips throughout, which can exceed the default 5s under load.
+jest.setTimeout(30000);
+
 const validUser = {
   name: "Joi Valid User",
   email: "joi_valid_user@gmail.com",

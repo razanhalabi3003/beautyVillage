@@ -49,7 +49,6 @@ describe("Auth Tests", () => {
       email: userInfo.email,
       password: userInfo.password
     });
-    console.log(response.body);
     expect(response.statusCode).toBe(200);
     const accessToken = response.body.accessToken;
     const refreshToken = response.body.refreshToken;

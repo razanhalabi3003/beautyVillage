@@ -6,6 +6,10 @@ import { Express } from "express";
 
 let app: Express;
 
+// Same reasoning as the other test files - bcrypt hashing plus network
+// round trips can exceed the default 5s hook timeout under load.
+jest.setTimeout(30000);
+
 type UserInfo = {
   name: string;
   email: string;
@@ -19,11 +23,8 @@ const commentsUserInfo: UserInfo = {
 };
 
 beforeAll(async () => {
-  console.log("init app");
   app = await initApp();
-  console.log("init app finished");
   // await commentsModel.deleteMany();
-  console.log("delete all posts");
   // register may fail if this user already exists from a previous run - that's fine, login still works
   await request(app).post("/auth/register").send(commentsUserInfo);
   const response = await request(app).post("/auth/login").send({
@@ -59,7 +60,6 @@ const testCommentFail = {
 describe("Comments Tests", () => {
   test("Comments Get All coimments", async () => {
     const response = await request(app).get("/comments");
-    console.log(response.body);
     expect(response.statusCode).toBe(200);
   });
 
@@ -67,7 +67,6 @@ describe("Comments Tests", () => {
     const response = await request(app).post("/comments")
       .set("authorization", "JWT " + commentsUserInfo.token)
       .send(testComment1);
-    console.log(response.body);
     const comment = response.body;
     expect(response.statusCode).toBe(201);
     expect(comment.owner).toBe(testComment1.owner);

@@ -83,7 +83,6 @@ const login = async (req: Request, res: Response) => {
             return;
         }
 
-        //TODO: generate access token§
         const userId: string = user._id.toString();
         const tokens = generateTokens(userId);
         if (!tokens) {
