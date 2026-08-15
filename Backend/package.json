@@ -12,7 +12,9 @@
     "testFile": "shx cp .env_test .env && tsc && jest --detectOpenHandles --forceExit file.test.ts",
     "migrate:users": "shx cp .env_dev .env && ts-node src/scripts/migrate_users.ts",
     "seed:admin": "shx cp .env_dev .env && ts-node src/scripts/seed_admin.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc",
+    "heroku-postbuild": "npm run build"
   },
   "author": "Yehuda Rozliyo",
   "license": "ISC",
