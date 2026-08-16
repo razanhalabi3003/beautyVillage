@@ -6,6 +6,16 @@
 
 This project is a solo student final project for an Advanced Full Stack course. It extends a lecturer-provided Node.js/Express/TypeScript/MongoDB backend scaffold and a React/Vite/TypeScript frontend scaffold with a complete application built on top.
 
+## Live Deployment
+
+**Live Frontend:** https://beautyvillage-frontend.onrender.com
+
+**Live Backend:** https://beautyvillage.onrender.com
+
+**API Documentation:** https://beautyvillage.onrender.com/api-docs
+
+> The backend runs on Render's free tier, which spins down after a period of inactivity. If the site has been idle, the **first** request may take up to a minute while the backend wakes up — subsequent requests are fast.
+
 ## Features
 
 - Public business search/browsing with category and text filters
@@ -20,11 +30,35 @@ This project is a solo student final project for an Advanced Full Stack course. 
 
 ## Roles
 
-| Role | Capabilities |
-|---|---|
-| Customer | Browse businesses, book appointments, leave reviews, submit a business for approval |
-| Business owner | Everything a customer can do, plus manage their own business profile, services, portfolio, and incoming appointments |
-| Admin | Approve/reject/suspend businesses, activate/suspend users, moderate reviews, manage categories, view platform stats |
+The application has three roles: **customer**, **businessOwner**, and **admin**.
+
+**Customer**
+- Browse businesses
+- Search/filter businesses
+- View business details, services, portfolio, ratings and reviews
+- Book appointments
+- View personal appointments
+- Cancel eligible appointments
+- Create a review only after an appointment is completed
+
+**Business owner**
+- Manage business profile
+- Manage working hours
+- Manage services
+- Deactivate/reactivate services
+- Manage logo, cover image and portfolio
+- View and manage business appointments
+- Confirm/reject appointments
+- Cancel eligible confirmed appointments
+- Mark appointments as completed when allowed
+
+**Admin**
+- View overview statistics
+- Approve/reject businesses
+- Suspend/reactivate businesses
+- Suspend/reactivate users
+- Hide/restore reviews
+- Create/edit/deactivate/reactivate categories
 
 ## Frontend Tech
 
@@ -33,6 +67,14 @@ React 18, TypeScript, Vite, React Router v7 (with `React.lazy`/`Suspense` code-s
 ## Backend Tech
 
 Node.js, Express, TypeScript, MongoDB with Mongoose, JWT access/refresh authentication, Joi validation, Multer (in-DB media storage), Jest + Supertest, Swagger (partial coverage — see below).
+
+## Deployment
+
+- **Frontend:** Render Static Site
+- **Backend:** Render Web Service
+- **Database:** MongoDB Atlas
+- The production/demo database used by the live deployment is **separate from the automated test database** used by `npm test`.
+- Environment variables (`DB_CONNECT`, `TOKEN_SECRET`, `CLIENT_ORIGIN`, etc.) are configured securely in Render's dashboard and are **not committed to GitHub**.
 
 ## Folder Structure
 
