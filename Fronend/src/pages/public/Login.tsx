@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import axios from "axios";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import type { Location } from "react-router-dom";
 import useAuth from "../../custom_hooks/useAuth";
@@ -30,8 +31,12 @@ const Login: FC = () => {
             await login(values.email, values.password);
             const from = (location.state as { from?: Location } | null)?.from;
             navigate(from?.pathname ?? "/", { replace: true });
-        } catch {
-            setServerError("אימייל או סיסמה שגויים");
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response?.status === 429) {
+                setServerError("בוצעו יותר מדי ניסיונות התחברות. נסו שוב בעוד מספר דקות.");
+            } else {
+                setServerError("אימייל או סיסמה שגויים");
+            }
         }
     };
 

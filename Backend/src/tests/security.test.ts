@@ -3,6 +3,10 @@ import initApp from "../server";
 import mongoose from "mongoose";
 import { Express } from "express";
 
+// Real Atlas round-trips + bcrypt hashing can exceed Jest's 5s default,
+// same reasoning as every other suite in this project.
+jest.setTimeout(30000);
+
 let app: Express;
 
 beforeAll(async () => {
@@ -50,6 +54,20 @@ describe("General API rate limiting", () => {
 });
 
 describe("Auth rate limiting", () => {
+    // Order matters in this describe block: the login limiter's in-memory
+    // counter persists across tests in this file, and once it trips it stays
+    // tripped for the rest of the run. Tests that expect a successful login
+    // must run before the test that deliberately exhausts the limiter.
+    const loginCredentials = {
+        name: "Security Rate Limit User",
+        email: `security-ratelimit-${Date.now()}@example.com`,
+        password: "123456",
+    };
+
+    beforeAll(async () => {
+        await request(app).post("/auth/register").send(loginCredentials);
+    });
+
     test("normal login attempts still work under the limit", async () => {
         const response = await request(app)
             .post("/auth/login")
@@ -57,7 +75,38 @@ describe("Auth rate limiting", () => {
         expect(response.statusCode).not.toBe(429);
     });
 
-    test("returns 429 after exceeding the auth attempt cap", async () => {
+    test("repeated successful logins never consume the quota, and login still works afterward", async () => {
+        await withRateLimitEnabled(async () => {
+            for (let i = 0; i < 15; i++) {
+                const response = await request(app)
+                    .post("/auth/login")
+                    .send({ email: loginCredentials.email, password: loginCredentials.password });
+                expect(response.statusCode).toBe(200);
+            }
+        });
+    });
+
+    test("login and register are rate-limited independently", async () => {
+        await withRateLimitEnabled(async () => {
+            for (let i = 0; i < 10; i++) {
+                await request(app)
+                    .post("/auth/register")
+                    .send({ name: "Flood", email: `flood-${Date.now()}-${i}@example.com`, password: "123456" });
+            }
+            const registerResponse = await request(app)
+                .post("/auth/register")
+                .send({ name: "Flood", email: `flood-${Date.now()}-final@example.com`, password: "123456" });
+            expect(registerResponse.statusCode).toBe(429);
+
+            // Exhausting the register limiter must not affect login.
+            const loginResponse = await request(app)
+                .post("/auth/login")
+                .send({ email: loginCredentials.email, password: loginCredentials.password });
+            expect(loginResponse.statusCode).toBe(200);
+        });
+    });
+
+    test("repeated failed logins eventually trigger 429", async () => {
         await withRateLimitEnabled(async () => {
             let lastStatus = 0;
             for (let i = 0; i < 11; i++) {

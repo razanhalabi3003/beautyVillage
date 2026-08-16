@@ -13,7 +13,22 @@ export const generalLimiter = rateLimit({
     skip: isTestEnv,
 });
 
-export const authLimiter = rateLimit({
+// Separate from registerLimiter so normal registration activity can never
+// count against - or be blocked by - a user's login attempts, or vice versa.
+// skipSuccessfulRequests means only failed login attempts consume the quota:
+// switching between several accounts and logging in/out repeatedly must
+// never lock a user out of a correct login.
+export const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: isTestEnv,
+    skipSuccessfulRequests: true,
+    message: { message: "Too many attempts, please try again later" },
+});
+
+export const registerLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
     standardHeaders: true,
